@@ -123,12 +123,6 @@ end { simbolo = simb_end;
           return MULT;
  }
 
-\/  { simbolo = simb_barra;
-          strncpy (token, yytext, TAM_TOKEN);
-          IMPRIME(" barra ");
-          return DIV;
- }
-
 \]  { simbolo = simb_abre_colchetes;  
           strncpy (token, yytext, TAM_TOKEN);
           IMPRIME(" abre_colchetes ");

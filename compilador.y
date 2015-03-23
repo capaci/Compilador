@@ -26,7 +26,9 @@ char dados[256];
 
 
 %%
-// ----- Programa
+/* -------------------------------------------------------------------
+ *  PROGRAM
+ * ------------------------------------------------------------------- */
 programa    :{ 
              geraCodigo (NULL, "INPP");
              }
@@ -38,7 +40,9 @@ programa    :{
              }
 ;
 
-// ----- DECLARACAO DE VARIAVEIS
+/* -------------------------------------------------------------------
+ *  DECLARACAO DE VARIAVEIS
+ * ------------------------------------------------------------------- */
 bloco       : 
               parte_declara_vars
               { 
@@ -83,7 +87,9 @@ lista_idents: lista_idents VIRGULA IDENT
 
 variavel: IDENT
 
-// ----- COMANDOS
+/* -------------------------------------------------------------------
+ *  COMANDOS
+ * ------------------------------------------------------------------- */
 comando_composto: T_BEGIN comandos T_END 
 ;
 
@@ -109,31 +115,34 @@ comando_condicional:;
 comando_repetitivo:;
 
 
-// ----- EXPRESSOES
+/* -------------------------------------------------------------------
+ *  EXPRESSOES
+ * ------------------------------------------------------------------- */
 expressao:	expressao_simples
 		|	expressao_simples relacao expressao_simples
 ;
 
-expressao_simples:	MAIS
-					| MENOS
-					| termo MAIS termo
-					| termo MENOS termo
-					| termo OR termo
+expressao_simples:	  expressao_simples MAIS termo  { geraCodigo(NULL, "SOMA"); }
+					| expressao_simples MENOS termo { geraCodigo(NULL, "SUBT"); }
+					| expressao_simples OR termo    { geraCodigo(NULL, "DISJ"); }
 					| termo
 ;
 
-termo:  fator MULT fator
-	|	fator DIV fator
-	|	fator AND fator
+termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
+	|	termo AND fator  { geraCodigo(NULL, "CONJ"); }
+	|	termo DIV fator  { geraCodigo(NULL, "DIVI"); }
 	|	fator
 ;
 
-fator:	numero
+fator:	IDENT
+	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;
 
-
-
-
+relacao:  > 
+		| < 
+		| >= 
+		| <= 
+		| =
 
 numero:;
 
