@@ -59,8 +59,8 @@ extern int yydebug;
     ATRIBUICAO = 269,
     MAIS = 270,
     MENOS = 271,
-    ASTERISCO = 272,
-    BARRA = 273,
+    MULT = 272,
+    DIV = 273,
     ABRE_COLCHETES = 274,
     FECHA_COLCHETES = 275,
     LABEL = 276,
@@ -74,9 +74,13 @@ extern int yydebug;
     WHILE = 284,
     DO = 285,
     OR = 286,
-    DIV = 287,
-    AND = 288,
-    NOT = 289
+    AND = 287,
+    NOT = 288,
+    IGUAL = 289,
+    DIFERENTE = 290,
+    MAIOR = 291,
+    MENOR = 292,
+    NUMERO = 293
   };
 #endif
 

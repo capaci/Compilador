@@ -24,6 +24,14 @@ numero [0-9]+
 
 comentario "(*".*"*)"
 
+igual [=]
+
+diferente [!=]
+
+maior [>]
+
+menor [<]
+
 %%
 
 {pulo_linha} {nl++;} 
@@ -31,6 +39,12 @@ comentario "(*".*"*)"
 {descarte}
 
 {comentario}
+
+{numero} { simbolo  = simb_numero;  
+          strncpy (token, yytext, TAM_TOKEN);
+          IMPRIME("numero ");
+          return NUMERO;
+ }
 
 program { simbolo  = simb_program;  
           strncpy (token, yytext, TAM_TOKEN);
@@ -219,6 +233,29 @@ not { simbolo = simb_not;
           return NOT;
  }
 
+{igual} { simbolo = simb_igual;
+          strncpy ( token , yytext, TAM_TOKEN);
+          IMPRIME(" igual ");
+          return IGUAL;
+ }
+
+{diferente} { simbolo = simb_diferente;
+          strncpy ( token , yytext, TAM_TOKEN);
+          IMPRIME(" diferente ");
+          return DIFERENTE;
+ }
+
+{maior} { simbolo = simb_maior;
+          strncpy ( token , yytext, TAM_TOKEN);
+          IMPRIME(" maior ");
+          return MAIOR;
+ }
+
+{menor} { simbolo = simb_menor;
+          strncpy ( token , yytext, TAM_TOKEN);
+          IMPRIME(" menor ");
+          return MENOR;
+ }
 
 
 

@@ -20,10 +20,7 @@ char dados[256];
 
 %token MAIS MENOS MULT DIV ABRE_COLCHETES FECHA_COLCHETES LABEL
 %token TYPE ARRAY OF GOTO IF THEN ELSE WHILE DO OR
-%token DIV AND NOT
-
-
-
+%token AND NOT IGUAL DIFERENTE MAIOR MENOR NUMERO
 
 %%
 /* -------------------------------------------------------------------
@@ -86,6 +83,7 @@ lista_idents: lista_idents VIRGULA IDENT
 ;
 
 variavel: IDENT
+;
 
 /* -------------------------------------------------------------------
  *  COMANDOS
@@ -93,33 +91,35 @@ variavel: IDENT
 comando_composto: T_BEGIN comandos T_END 
 ;
 
-comandos: numero DOIS_PONTOS comando_sem_rotulo PONTO_E_VIRGULA
-		| comando_sem_rotulo PONTO_E_VIRGULA
-		| comandos
+comandos: rotulo comando_sem_rotulo
+		| comando_sem_rotulo
+
 ;
 
-comando_sem_rotulo: atribuicao
-					| chamada_de_procedimento
-					| desvio
-					| comando_composto
-					| comando_condicional
+comando_sem_rotulo: atribuicao  PONTO_E_VIRGULA
+//					| chamada_de_procedimento
+//					| desvio
+//					| comando_composto
+//					| comando_condicional
 					| comando_repetitivo
 ;
 
-atribuicao: variavel ATRIBUICAO expressao
+atribuicao: variavel ATRIBUICAO expressao { geraCodigo(NULL, "ARMZ 0,0");}
 ;
-chamada_de_procedimento:;
-desvio:;
-comando_composto:;
-comando_condicional:;
-comando_repetitivo:;
 
+//chamada_de_procedimento:;
+//desvio:;
+//comando_condicional:;
+comando_repetitivo: WHILE expressao comando_composto
+;
 
+rotulo: numero DOIS_PONTOS
+;
 /* -------------------------------------------------------------------
  *  EXPRESSOES
  * ------------------------------------------------------------------- */
-expressao:	expressao_simples
-		|	expressao_simples relacao expressao_simples
+expressao:	expressao_simples {printf("sss3\n");}
+		|	expressao_simples  {printf("1\n");} relacao {printf("2\n");} expressao_simples {printf("3\n");}
 ;
 
 expressao_simples:	  expressao_simples MAIS termo  { geraCodigo(NULL, "SOMA"); }
@@ -135,16 +135,19 @@ termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
 ;
 
 fator:	IDENT
+	|	numero
 	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;
 
-relacao:  > 
-		| < 
-		| >= 
-		| <= 
-		| =
+relacao:  MAIOR 
+		| MENOR
+		| MAIOR IGUAL
+		| MENOR IGUAL
+		| IGUAL
+;
 
-numero:;
+numero: NUMERO { sprintf(dados, "CRCT %s",token); geraCodigo(NULL, dados);}
+;
 
 %%
 
