@@ -111,7 +111,7 @@ comando_sem_rotulo: atribuicao  PONTO_E_VIRGULA comandos
 //					| comando_composto
 //					| comando_condicional
 					| comando_repetitivo comandos
-					|
+					Z
 ;
 
 atribuicao: variavel ATRIBUICAO expressao { geraCodigo(NULL, "ARMZ 0,0");}

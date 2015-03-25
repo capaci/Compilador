@@ -77,10 +77,9 @@ extern int yydebug;
     AND = 287,
     NOT = 288,
     IGUAL = 289,
-    DIFERENTE = 290,
-    MAIOR = 291,
-    MENOR = 292,
-    NUMERO = 293
+    MAIOR = 290,
+    MENOR = 291,
+    NUMERO = 292
   };
 #endif
 

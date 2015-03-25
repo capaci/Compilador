@@ -3,8 +3,8 @@ var m,n :  integer;
 	a,b :  boolean;
  
 begin
-	a := c + 2;
-	while a < 10 do
+	a := b + 2;
+	while a > 3 do
 	begin
 	end
 end.

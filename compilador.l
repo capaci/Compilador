@@ -26,8 +26,6 @@ comentario "(*".*"*)"
 
 igual [=]
 
-diferente [!=]
-
 maior [>]
 
 menor [<]
@@ -237,12 +235,6 @@ not { simbolo = simb_not;
           strncpy ( token , yytext, TAM_TOKEN);
           IMPRIME(" igual ");
           return IGUAL;
- }
-
-{diferente} { simbolo = simb_diferente;
-          strncpy ( token , yytext, TAM_TOKEN);
-          IMPRIME(" diferente ");
-          return DIFERENTE;
  }
 
 {maior} { simbolo = simb_maior;
