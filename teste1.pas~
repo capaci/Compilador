@@ -1,9 +1,9 @@
 program exemplo75 (input, output);
 var m,n :  integer;
 	a,b :  boolean;
- 
+	m: integer: 
 begin
-	a := c + 2;
+	a := b + 2;
 	while a < 10 do
 	begin
 	end

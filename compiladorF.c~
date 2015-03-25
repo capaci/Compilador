@@ -95,12 +95,9 @@ noTS* desempilhaTS(){
 /* Busca simbolo na TS*/
 int buscaTS(char *simb, int nivelLex, int desloc){
 	noTS *no = pilhaTS->topo;
-	while (no != NULL){
+	while (no != NULL)
 		if (no->nivelLexico == nivelLex && no->deslocamento == desloc && strcmp(simb, no->ident) == 0)
 			return 1;
-		no = no->anterior;
-	}
-
 	return 0;
 }
 

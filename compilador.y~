@@ -149,7 +149,7 @@ termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
 	|	fator
 ;
 
-fator:	variavel
+fator:	IDENT
 	|	numero
 	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;
