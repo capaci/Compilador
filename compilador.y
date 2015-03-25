@@ -70,10 +70,13 @@ tipo        : IDENT
 
 lista_id_var: lista_id_var VIRGULA IDENT 
               { /* insere última vars na tabela de símbolos */
+				empilhaTS( token, "integer", "VS", 0, 0);
+	
 				numVars++;
 			 }
             | IDENT 
 			  { /* insere vars na tabela de símbolos */
+				empilhaTS( token, "integer", "VS", 0, 0);
 				numVars++;		
 			 }
 ;
@@ -110,7 +113,7 @@ atribuicao: variavel ATRIBUICAO expressao { geraCodigo(NULL, "ARMZ 0,0");}
 //chamada_de_procedimento:;
 //desvio:;
 //comando_condicional:;
-comando_repetitivo: WHILE expressao comando_composto
+comando_repetitivo: WHILE expressao DO comando_composto
 ;
 
 rotulo: numero DOIS_PONTOS
@@ -119,13 +122,13 @@ rotulo: numero DOIS_PONTOS
  *  EXPRESSOES
  * ------------------------------------------------------------------- */
 expressao:	expressao_simples {printf("sss3\n");}
-		|	expressao_simples  {printf("1\n");} relacao {printf("2\n");} expressao_simples {printf("3\n");}
 ;
 
 expressao_simples:	  expressao_simples MAIS termo  { geraCodigo(NULL, "SOMA"); }
 					| expressao_simples MENOS termo { geraCodigo(NULL, "SUBT"); }
 					| expressao_simples OR termo    { geraCodigo(NULL, "DISJ"); }
 					| termo
+					|	expressao_simples  {printf("1\n");} relacao_booleana {printf("2\n");} expressao_simples {printf("3\n");}
 ;
 
 termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
@@ -139,7 +142,7 @@ fator:	IDENT
 	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;
 
-relacao:  MAIOR 
+relacao_booleana:  MAIOR 
 		| MENOR
 		| MAIOR IGUAL
 		| MENOR IGUAL
@@ -152,28 +155,28 @@ numero: NUMERO { sprintf(dados, "CRCT %s",token); geraCodigo(NULL, dados);}
 %%
 
 main (int argc, char** argv) {
-   FILE* fp;
-   extern FILE* yyin;
+	FILE* fp;
+	extern FILE* yyin;
 
-   if (argc<2 || argc>2) {
-         printf("usage compilador <arq>a %d\n", argc);
-         return(-1);
-      }
+	if (argc<2 || argc>2) {
+		printf("usage compilador <arq>a %d\n", argc);
+		return(-1);
+	}
 
-   fp=fopen (argv[1], "r");
-   if (fp == NULL) {
-      printf("usage compilador <arq>b\n");
-      return(-1);
-   }
+	fp=fopen (argv[1], "r");
+	if (fp == NULL) {
+		printf("usage compilador <arq>b\n");
+		return(-1);
+	}
 
 
 /* -------------------------------------------------------------------
  *  Inicia a Tabela de Símbolos
  * ------------------------------------------------------------------- */
+	iniciaTS();
+	yyin=fp;
+	yyparse();
 
-   yyin=fp;
-   yyparse();
-
-   return 0;
+	return 0;
 }
 

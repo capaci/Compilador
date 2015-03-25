@@ -11,7 +11,7 @@
  *
  * ------------------------------------------------------------------- */
 
-#define TAM_TOKEN 16
+#define TAM_TOKEN 32
 
 typedef enum simbolos { 
   simb_program, simb_var, simb_begin, simb_end, 
@@ -47,7 +47,22 @@ typedef enum simbolos {
 , simb_nao
 } simbolos;
 
+/* -------------------------------------------------------------------
+ * TABELA DE SIMBOLOS
+ * ------------------------------------------------------------------- */
+typedef struct noTS {
+	char *ident;
+	char *tipo;
+	char *categ;
+	int nivelLexico;
+	int deslocamento;
+	struct noTS *prox, *anterior;
+} noTS;
 
+typedef struct TS{
+	noTS *topo;
+	int tam;
+} TS;
 
 /* -------------------------------------------------------------------
  * variáveis globais
@@ -63,5 +78,5 @@ extern int nl;
 simbolos simbolo, relacao;
 char token[TAM_TOKEN];
 
-
+TS *pilhaTS;
 

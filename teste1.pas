@@ -3,5 +3,7 @@ var m,n :  integer;
     a,b :  boolean;
 begin
 	a := b + 2;
-	
+	while a < 10 do
+	begin
+	end
 end.
