@@ -151,7 +151,7 @@ termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
 	|	fator
 ;
 
-fator:	variavel { geraCodigo(NULL, "CRVL 0,0");}
+fator:	variavel { sprintf(dados, "CRVL %s",token); geraCodigo(NULL, dados);}
 	|	numero
 	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;

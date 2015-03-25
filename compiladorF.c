@@ -71,8 +71,13 @@ void empilhaTS( char *id, char *tpVar, char *cat, int nivelLex, int desloc){
 	no->anterior = pilhaTS->topo;
 	no->prox = NULL;
 
+	if (pilhaTS->tam != 0)
+		pilhaTS->topo->prox = no;
 	pilhaTS->topo = no;
 	pilhaTS->tam++;
+
+	if (pilhaTS->tam == 1)
+		pilhaTS->primeiro = pilhaTS->topo;
 
 	imprimeTS();
 
@@ -106,10 +111,11 @@ int buscaTS(char *simb, int nivelLex, int desloc){
 
 /* Imprime a TS*/
 void imprimeTS(){
-	noTS *no = pilhaTS->topo;
+	noTS *no = pilhaTS->primeiro;
+
 	while(no != NULL){
 		printf("id = %s, tipo = %s, categ = %s, nivelLex = %d, desloc = %d\n", no->ident, no->tipo, no->categ, no->nivelLexico, no->deslocamento);
-		no = no->anterior;
+		no = no->prox;
 	}
 }
 

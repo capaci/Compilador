@@ -60,7 +60,7 @@ typedef struct noTS {
 } noTS;
 
 typedef struct TS{
-	noTS *topo;
+	noTS *topo, *primeiro;
 	int tam;
 } TS;
 

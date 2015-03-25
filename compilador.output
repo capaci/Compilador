@@ -67,9 +67,9 @@ Gramática
    24                   | comando_repetitivo comandos
    25                   | %empty
 
-   26 atribuicao: variavel ATRIBUICAO expressao
+   26 atribuicao: variavel ATRIBUICAO expressao_simples
 
-   27 comando_repetitivo: WHILE expressao DO comandos
+   27 comando_repetitivo: WHILE expressao_booleana DO comandos
 
    28 rotulo: numero DOIS_PONTOS
 
@@ -79,7 +79,7 @@ Gramática
 
    31 $@7: %empty
 
-   32 expressao: expressao_simples $@6 relacao $@7 expressao_simples
+   32 expressao_booleana: expressao_simples $@6 relacao $@7 expressao_simples
 
    33 expressao_simples: expressao_simples MAIS termo
    34                  | expressao_simples MENOS termo
@@ -192,14 +192,14 @@ rotulo (58)
     à esquerda: 28, à direita: 20
 variavel (59)
     à esquerda: 29, à direita: 26 41
-expressao (60)
-    à esquerda: 32, à direita: 26 27
+expressao_booleana (60)
+    à esquerda: 32, à direita: 27
 $@6 (61)
     à esquerda: 30, à direita: 32
 $@7 (62)
     à esquerda: 31, à direita: 32
 expressao_simples (63)
-    à esquerda: 33 34 35 36, à direita: 32 33 34 35 43
+    à esquerda: 33 34 35 36, à direita: 26 32 33 34 35 43
 termo (64)
     à esquerda: 37 38 39 40, à direita: 33 34 35 36 37 38 39
 fator (65)
@@ -485,18 +485,18 @@ State 30
 
 State 31
 
-   27 comando_repetitivo: WHILE . expressao DO comandos
+   27 comando_repetitivo: WHILE . expressao_booleana DO comandos
 
     ABRE_PARENTESES  deslocar, e ir ao estado 42
     IDENT            deslocar, e ir ao estado 30
     NUMERO           deslocar, e ir ao estado 32
 
-    variavel           ir ao estado 43
-    expressao          ir ao estado 44
-    expressao_simples  ir ao estado 45
-    termo              ir ao estado 46
-    fator              ir ao estado 47
-    numero             ir ao estado 48
+    variavel            ir ao estado 43
+    expressao_booleana  ir ao estado 44
+    expressao_simples   ir ao estado 45
+    termo               ir ao estado 46
+    fator               ir ao estado 47
+    numero              ir ao estado 48
 
 
 State 32
@@ -573,7 +573,7 @@ State 37
 
 State 38
 
-   26 atribuicao: variavel . ATRIBUICAO expressao
+   26 atribuicao: variavel . ATRIBUICAO expressao_simples
 
     ATRIBUICAO  deslocar, e ir ao estado 53
 
@@ -627,14 +627,14 @@ State 43
 
 State 44
 
-   27 comando_repetitivo: WHILE expressao . DO comandos
+   27 comando_repetitivo: WHILE expressao_booleana . DO comandos
 
     DO  deslocar, e ir ao estado 59
 
 
 State 45
 
-   32 expressao: expressao_simples . $@6 relacao $@7 expressao_simples
+   32 expressao_booleana: expressao_simples . $@6 relacao $@7 expressao_simples
    33 expressao_simples: expressao_simples . MAIS termo
    34                  | expressao_simples . MENOS termo
    35                  | expressao_simples . OR termo
@@ -726,15 +726,14 @@ State 52
 
 State 53
 
-   26 atribuicao: variavel ATRIBUICAO . expressao
+   26 atribuicao: variavel ATRIBUICAO . expressao_simples
 
     ABRE_PARENTESES  deslocar, e ir ao estado 42
     IDENT            deslocar, e ir ao estado 30
     NUMERO           deslocar, e ir ao estado 32
 
     variavel           ir ao estado 43
-    expressao          ir ao estado 68
-    expressao_simples  ir ao estado 45
+    expressao_simples  ir ao estado 68
     termo              ir ao estado 46
     fator              ir ao estado 47
     numero             ir ao estado 48
@@ -785,7 +784,7 @@ State 58
 
 State 59
 
-   27 comando_repetitivo: WHILE expressao DO . comandos
+   27 comando_repetitivo: WHILE expressao_booleana DO . comandos
 
     IDENT   deslocar, e ir ao estado 30
     WHILE   deslocar, e ir ao estado 31
@@ -854,7 +853,7 @@ State 62
 
 State 63
 
-   32 expressao: expressao_simples $@6 . relacao $@7 expressao_simples
+   32 expressao_booleana: expressao_simples $@6 . relacao $@7 expressao_simples
 
     IGUAL  deslocar, e ir ao estado 75
     MAIOR  deslocar, e ir ao estado 76
@@ -911,7 +910,14 @@ State 67
 
 State 68
 
-   26 atribuicao: variavel ATRIBUICAO expressao .
+   26 atribuicao: variavel ATRIBUICAO expressao_simples .
+   33 expressao_simples: expressao_simples . MAIS termo
+   34                  | expressao_simples . MENOS termo
+   35                  | expressao_simples . OR termo
+
+    MAIS   deslocar, e ir ao estado 60
+    MENOS  deslocar, e ir ao estado 61
+    OR     deslocar, e ir ao estado 62
 
     $padrão  reduzir usando a regra 26 (atribuicao)
 
@@ -932,7 +938,7 @@ State 70
 
 State 71
 
-   27 comando_repetitivo: WHILE expressao DO comandos .
+   27 comando_repetitivo: WHILE expressao_booleana DO comandos .
 
     $padrão  reduzir usando a regra 27 (comando_repetitivo)
 
@@ -1010,7 +1016,7 @@ State 77
 
 State 78
 
-   32 expressao: expressao_simples $@6 relacao . $@7 expressao_simples
+   32 expressao_booleana: expressao_simples $@6 relacao . $@7 expressao_simples
 
     $padrão  reduzir usando a regra 31 ($@7)
 
@@ -1068,7 +1074,7 @@ State 85
 
 State 86
 
-   32 expressao: expressao_simples $@6 relacao $@7 . expressao_simples
+   32 expressao_booleana: expressao_simples $@6 relacao $@7 . expressao_simples
 
     ABRE_PARENTESES  deslocar, e ir ao estado 42
     IDENT            deslocar, e ir ao estado 30
@@ -1083,7 +1089,7 @@ State 86
 
 State 87
 
-   32 expressao: expressao_simples $@6 relacao $@7 expressao_simples .
+   32 expressao_booleana: expressao_simples $@6 relacao $@7 expressao_simples .
    33 expressao_simples: expressao_simples . MAIS termo
    34                  | expressao_simples . MENOS termo
    35                  | expressao_simples . OR termo
@@ -1092,4 +1098,4 @@ State 87
     MENOS  deslocar, e ir ao estado 61
     OR     deslocar, e ir ao estado 62
 
-    $padrão  reduzir usando a regra 32 (expressao)
+    $padrão  reduzir usando a regra 32 (expressao_booleana)
