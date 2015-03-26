@@ -47,6 +47,12 @@ typedef enum simbolos {
 , simb_nao
 } simbolos;
 
+typedef enum tipo { 
+  INTEGER
+, BOOLEAN
+, UNKNOW 
+} tipo;
+
 /* -------------------------------------------------------------------
  * TABELA DE SIMBOLOS
  * ------------------------------------------------------------------- */

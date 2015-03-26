@@ -23,7 +23,7 @@
  * ------------------------------------------------------------------- */
 
 FILE* fp=NULL;
-void geraCodigo (char* rot, char* comando) {
+void geraCodigo (char* rot, char* comando ) {
 
   if (fp == NULL) {
     fp = fopen ("MEPA", "w");
@@ -101,7 +101,7 @@ noTS* desempilhaTS(){
 int buscaTS(char *simb, int nivelLex, int desloc){
 	noTS *no = pilhaTS->topo;
 	while (no != NULL){
-		if (no->nivelLexico == nivelLex && no->deslocamento == desloc && strcmp(simb, no->ident) == 0){
+		if (/*no->nivelLexico == nivelLex && no->deslocamento == desloc && */strcmp(simb, no->ident) == 0){
 			noAux = no;
 			return 1;
 		}
@@ -112,8 +112,9 @@ int buscaTS(char *simb, int nivelLex, int desloc){
 }
 
 /* Busca simbolo na TS*/
-noTS *busca_simb_TS(char simb[TAM_TOKEN]){
+noTS *busca_endereco_lexico(char simb[TAM_TOKEN]){
 	noTS *no = pilhaTS->topo;
+	printf("----buscaSimb----");
 	while (no != NULL){
 		printf("id = %s, tipo = %s, categ = %s, nivelLex = %d, desloc = %d\n", no->ident, no->tipo, no->categ, no->nivelLexico, no->deslocamento);
 		if (strcmp(simb, no->ident) == 0)

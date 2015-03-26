@@ -60,7 +60,7 @@ declara_var : { }
               lista_id_var DOIS_PONTOS 
               tipo 
               { /* AMEM */
-
+				/*atualizar tipo das variaveis*/
 	          }
               PONTO_E_VIRGULA
 ;
@@ -97,12 +97,11 @@ var_id: IDENT
 /* -------------------------------------------------------------------
  *  COMANDOS
  * ------------------------------------------------------------------- */
-comando_composto: {printf("aquiii\n");} T_BEGIN  comandos T_END 
+comando_composto: T_BEGIN  comandos T_END 
 ;
 
-comandos:
-		 comando_sem_rotulo comandos
-		| comando_composto
+comandos: comando_sem_rotulo comandos
+//		| comando_composto
 		| 
 ;
 
@@ -111,7 +110,7 @@ comando_sem_rotulo: atribuicao PONTO_E_VIRGULA
 //					| desvio
 //					| comando_composto
 //					| comando_condicional
-					| comando_repetitivo comandos  
+					| comando_repetitivo comandos
 					
 ;
 
@@ -131,7 +130,7 @@ comando_repetitivo: WHILE expressao DO comando_composto
 //rotulo: numero DOIS_PONTOS
 //;
 
-variavel: IDENT {
+variavel:  IDENT {
 					if (!buscaTS(token, 0, 0)){
 						printf("A variavel %s nao foi declarada\n", token);
 					}

@@ -1,0 +1,71 @@
+program     # program 
+ ident      # exemplo75 
+ abre_parenteses      # ( 
+ ident      # input 
+ virgula      # , 
+ ident      # output 
+ fecha_parenteses     # ) 
+ pt_virgula      # ; 
+var      # var 
+ ident      # m 
+id = m, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+ virgula      # , 
+ ident      # n 
+id = m, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = n, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+ dois pontos     # : 
+ ident      # integer 
+ pt_virgula      # ; 
+ ident      # a 
+id = m, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = n, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = a, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+ virgula      # , 
+ ident      # b 
+id = m, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = n, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = a, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+id = b, tipo = integer, categ = VS, nivelLex = 0, desloc = 0
+ dois pontos     # : 
+ ident      # boolean 
+ pt_virgula      # ; 
+begin     # begin 
+comando_composto
+ ident      # a 
+comandos 1
+comando_sem_rotulo 1
+atribuicao
+variavel
+ atribuicao      # := 
+numero     # 2 
+ mais     # + 
+numero     # 1 
+ pt_virgula      # ; 
+while     # while 
+comandos 1
+comando_sem_rotulo 2
+repeticao
+ ident      # a 
+variavel
+ menor     # < 
+numero     # 10 
+do      # do 
+comando_composto
+begin     # begin 
+ ident      # a 
+comandos 1
+comando_sem_rotulo 1
+atribuicao
+variavel
+ atribuicao      # := 
+ ident      # a 
+variavel
+ mais     # + 
+numero     # 1 
+ pt_virgula      # ; 
+end      # end 
+comandos 3
+end      # end 
+comandos 3
+comandos 3
+ ponto      # . 

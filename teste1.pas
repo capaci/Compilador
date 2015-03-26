@@ -4,8 +4,8 @@ var m,n :  integer;
  
 begin
 	a := 2 + 1;
-	while a < 10
+	while a < 10 do
 	begin
-		a:= a+1;
+		a := a+1;
 	end
 end.

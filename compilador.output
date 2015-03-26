@@ -13,8 +13,8 @@ Terminais não utilizados na gramática
    NOT
 
 
-Estado 37 conflitos: 2 de deslocamento/redução, 1 de redução/redução
-Estado 39 conflitos: 2 de deslocamento/redução, 1 de redução/redução
+Estado 33 conflitos: 2 de deslocamento/redução
+Estado 35 conflitos: 2 de deslocamento/redução
 
 
 Gramática
@@ -54,47 +54,44 @@ Gramática
 
    18 var_id: IDENT
 
-   19 $@6: %empty
+   19 comando_composto: T_BEGIN comandos T_END
 
-   20 comando_composto: $@6 T_BEGIN comandos T_END
+   20 comandos: comando_sem_rotulo comandos
+   21         | %empty
 
-   21 comandos: comando_sem_rotulo comandos
-   22         | comando_composto
-   23         | %empty
+   22 comando_sem_rotulo: atribuicao PONTO_E_VIRGULA
+   23                   | comando_repetitivo comandos
 
-   24 comando_sem_rotulo: atribuicao PONTO_E_VIRGULA
-   25                   | comando_repetitivo comandos
+   24 atribuicao: variavel ATRIBUICAO expressao_simples
 
-   26 atribuicao: variavel ATRIBUICAO expressao_simples
+   25 comando_repetitivo: WHILE expressao DO comando_composto
 
-   27 comando_repetitivo: WHILE expressao DO comando_composto
+   26 variavel: IDENT
 
-   28 variavel: IDENT
+   27 expressao: expressao_simples relacao expressao_simples
 
-   29 expressao: expressao_simples relacao expressao_simples
+   28 expressao_simples: expressao_simples MAIS termo
+   29                  | expressao_simples MENOS termo
+   30                  | expressao_simples OR termo
+   31                  | termo
 
-   30 expressao_simples: expressao_simples MAIS termo
-   31                  | expressao_simples MENOS termo
-   32                  | expressao_simples OR termo
-   33                  | termo
+   32 termo: termo MULT fator
+   33      | termo AND fator
+   34      | termo DIV fator
+   35      | fator
 
-   34 termo: termo MULT fator
-   35      | termo AND fator
-   36      | termo DIV fator
-   37      | fator
+   36 fator: variavel
+   37      | numero
+   38      | ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 
-   38 fator: variavel
-   39      | numero
-   40      | ABRE_PARENTESES expressao_simples FECHA_PARENTESES
+   39 relacao: MAIOR
+   40        | MENOR
+   41        | MENOR MAIOR
+   42        | MAIOR IGUAL
+   43        | MENOR IGUAL
+   44        | IGUAL
 
-   41 relacao: MAIOR
-   42        | MENOR
-   43        | MENOR MAIOR
-   44        | MAIOR IGUAL
-   45        | MENOR IGUAL
-   46        | IGUAL
-
-   47 numero: NUMERO
+   45 numero: NUMERO
 
 
 Terminais, com as regras onde eles aparecem
@@ -102,21 +99,21 @@ Terminais, com as regras onde eles aparecem
 $end (0) 0
 error (256)
 PROGRAM (258) 2
-ABRE_PARENTESES (259) 2 40
-FECHA_PARENTESES (260) 2 40
+ABRE_PARENTESES (259) 2 38
+FECHA_PARENTESES (260) 2 38
 VIRGULA (261) 14 16
-PONTO_E_VIRGULA (262) 2 5 12 24
+PONTO_E_VIRGULA (262) 2 5 12 22
 DOIS_PONTOS (263) 12
 PONTO (264) 2
-T_BEGIN (265) 20
-T_END (266) 20
+T_BEGIN (265) 19
+T_END (266) 19
 VAR (267) 7
-IDENT (268) 2 13 16 17 18 28
-ATRIBUICAO (269) 26
-MAIS (270) 30
-MENOS (271) 31
-MULT (272) 34
-DIV (273) 36
+IDENT (268) 2 13 16 17 18 26
+ATRIBUICAO (269) 24
+MAIS (270) 28
+MENOS (271) 29
+MULT (272) 32
+DIV (273) 34
 ABRE_COLCHETES (274)
 FECHA_COLCHETES (275)
 LABEL (276)
@@ -127,15 +124,15 @@ GOTO (280)
 IF (281)
 THEN (282)
 ELSE (283)
-WHILE (284) 27
-DO (285) 27
-OR (286) 32
-AND (287) 35
+WHILE (284) 25
+DO (285) 25
+OR (286) 30
+AND (287) 33
 NOT (288)
-IGUAL (289) 44 45 46
-MAIOR (290) 41 43 44
-MENOR (291) 42 43 45
-NUMERO (292) 47
+IGUAL (289) 42 43 44
+MAIOR (290) 39 41 42
+MENOR (291) 40 41 43
+NUMERO (292) 45
 
 
 Não-terminais com as regras onde eles aparecem
@@ -171,31 +168,29 @@ lista_idents (51)
 var_id (52)
     à esquerda: 18, à direita: 14 15
 comando_composto (53)
-    à esquerda: 20, à direita: 4 22 27
-$@6 (54)
-    à esquerda: 19, à direita: 20
-comandos (55)
-    à esquerda: 21 22 23, à direita: 20 21 25
-comando_sem_rotulo (56)
-    à esquerda: 24 25, à direita: 21
-atribuicao (57)
-    à esquerda: 26, à direita: 24
-comando_repetitivo (58)
+    à esquerda: 19, à direita: 4 25
+comandos (54)
+    à esquerda: 20 21, à direita: 19 20 23
+comando_sem_rotulo (55)
+    à esquerda: 22 23, à direita: 20
+atribuicao (56)
+    à esquerda: 24, à direita: 22
+comando_repetitivo (57)
+    à esquerda: 25, à direita: 23
+variavel (58)
+    à esquerda: 26, à direita: 24 36
+expressao (59)
     à esquerda: 27, à direita: 25
-variavel (59)
-    à esquerda: 28, à direita: 26 38
-expressao (60)
-    à esquerda: 29, à direita: 27
-expressao_simples (61)
-    à esquerda: 30 31 32 33, à direita: 26 29 30 31 32 40
-termo (62)
-    à esquerda: 34 35 36 37, à direita: 30 31 32 33 34 35 36
-fator (63)
-    à esquerda: 38 39 40, à direita: 34 35 36 37
-relacao (64)
-    à esquerda: 41 42 43 44 45 46, à direita: 29
-numero (65)
-    à esquerda: 47, à direita: 39
+expressao_simples (60)
+    à esquerda: 28 29 30 31, à direita: 24 27 28 29 30 38
+termo (61)
+    à esquerda: 32 33 34 35, à direita: 28 29 30 31 32 33 34
+fator (62)
+    à esquerda: 36 37 38, à direita: 32 33 34 35
+relacao (63)
+    à esquerda: 39 40 41 42 43 44, à direita: 27
+numero (64)
+    à esquerda: 45, à direita: 37
 
 
 State 0
@@ -360,10 +355,9 @@ State 19
 
     4 bloco: parte_declara_vars $@2 . comando_composto
 
-    $padrão  reduzir usando a regra 19 ($@6)
+    T_BEGIN  deslocar, e ir ao estado 24
 
-    comando_composto  ir ao estado 24
-    $@6               ir ao estado 25
+    comando_composto  ir ao estado 25
 
 
 State 20
@@ -409,16 +403,25 @@ State 23
 
 State 24
 
-    4 bloco: parte_declara_vars $@2 comando_composto .
+   19 comando_composto: T_BEGIN . comandos T_END
 
-    $padrão  reduzir usando a regra 4 (bloco)
+    IDENT  deslocar, e ir ao estado 30
+    WHILE  deslocar, e ir ao estado 31
+
+    $padrão  reduzir usando a regra 21 (comandos)
+
+    comandos            ir ao estado 32
+    comando_sem_rotulo  ir ao estado 33
+    atribuicao          ir ao estado 34
+    comando_repetitivo  ir ao estado 35
+    variavel            ir ao estado 36
 
 
 State 25
 
-   20 comando_composto: $@6 . T_BEGIN comandos T_END
+    4 bloco: parte_declara_vars $@2 comando_composto .
 
-    T_BEGIN  deslocar, e ir ao estado 30
+    $padrão  reduzir usando a regra 4 (bloco)
 
 
 State 26
@@ -440,8 +443,8 @@ State 28
    12 declara_var: $@4 lista_id_var . DOIS_PONTOS tipo $@5 PONTO_E_VIRGULA
    14 lista_id_var: lista_id_var . VIRGULA var_id
 
-    VIRGULA      deslocar, e ir ao estado 31
-    DOIS_PONTOS  deslocar, e ir ao estado 32
+    VIRGULA      deslocar, e ir ao estado 37
+    DOIS_PONTOS  deslocar, e ir ao estado 38
 
 
 State 29
@@ -453,568 +456,531 @@ State 29
 
 State 30
 
-   20 comando_composto: $@6 T_BEGIN . comandos T_END
+   26 variavel: IDENT .
 
-    IDENT  deslocar, e ir ao estado 33
-    WHILE  deslocar, e ir ao estado 34
-
-    T_END     reduzir usando a regra 23 (comandos)
-    $padrão  reduzir usando a regra 19 ($@6)
-
-    comando_composto    ir ao estado 35
-    $@6                 ir ao estado 25
-    comandos            ir ao estado 36
-    comando_sem_rotulo  ir ao estado 37
-    atribuicao          ir ao estado 38
-    comando_repetitivo  ir ao estado 39
-    variavel            ir ao estado 40
+    $padrão  reduzir usando a regra 26 (variavel)
 
 
 State 31
+
+   25 comando_repetitivo: WHILE . expressao DO comando_composto
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel           ir ao estado 41
+    expressao          ir ao estado 42
+    expressao_simples  ir ao estado 43
+    termo              ir ao estado 44
+    fator              ir ao estado 45
+    numero             ir ao estado 46
+
+
+State 32
+
+   19 comando_composto: T_BEGIN comandos . T_END
+
+    T_END  deslocar, e ir ao estado 47
+
+
+State 33
+
+   20 comandos: comando_sem_rotulo . comandos
+
+    IDENT  deslocar, e ir ao estado 30
+    WHILE  deslocar, e ir ao estado 31
+
+    IDENT     [reduzir usando a regra 21 (comandos)]
+    WHILE     [reduzir usando a regra 21 (comandos)]
+    $padrão  reduzir usando a regra 21 (comandos)
+
+    comandos            ir ao estado 48
+    comando_sem_rotulo  ir ao estado 33
+    atribuicao          ir ao estado 34
+    comando_repetitivo  ir ao estado 35
+    variavel            ir ao estado 36
+
+
+State 34
+
+   22 comando_sem_rotulo: atribuicao . PONTO_E_VIRGULA
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 49
+
+
+State 35
+
+   23 comando_sem_rotulo: comando_repetitivo . comandos
+
+    IDENT  deslocar, e ir ao estado 30
+    WHILE  deslocar, e ir ao estado 31
+
+    IDENT     [reduzir usando a regra 21 (comandos)]
+    WHILE     [reduzir usando a regra 21 (comandos)]
+    $padrão  reduzir usando a regra 21 (comandos)
+
+    comandos            ir ao estado 50
+    comando_sem_rotulo  ir ao estado 33
+    atribuicao          ir ao estado 34
+    comando_repetitivo  ir ao estado 35
+    variavel            ir ao estado 36
+
+
+State 36
+
+   24 atribuicao: variavel . ATRIBUICAO expressao_simples
+
+    ATRIBUICAO  deslocar, e ir ao estado 51
+
+
+State 37
 
    14 lista_id_var: lista_id_var VIRGULA . var_id
 
     IDENT  deslocar, e ir ao estado 27
 
-    var_id  ir ao estado 41
-
-
-State 32
-
-   12 declara_var: $@4 lista_id_var DOIS_PONTOS . tipo $@5 PONTO_E_VIRGULA
-
-    IDENT  deslocar, e ir ao estado 42
-
-    tipo  ir ao estado 43
-
-
-State 33
-
-   28 variavel: IDENT .
-
-    $padrão  reduzir usando a regra 28 (variavel)
-
-
-State 34
-
-   27 comando_repetitivo: WHILE . expressao DO comando_composto
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel           ir ao estado 46
-    expressao          ir ao estado 47
-    expressao_simples  ir ao estado 48
-    termo              ir ao estado 49
-    fator              ir ao estado 50
-    numero             ir ao estado 51
-
-
-State 35
-
-   22 comandos: comando_composto .
-
-    $padrão  reduzir usando a regra 22 (comandos)
-
-
-State 36
-
-   20 comando_composto: $@6 T_BEGIN comandos . T_END
-
-    T_END  deslocar, e ir ao estado 52
-
-
-State 37
-
-   21 comandos: comando_sem_rotulo . comandos
-
-    IDENT  deslocar, e ir ao estado 33
-    WHILE  deslocar, e ir ao estado 34
-
-    T_BEGIN   reduzir usando a regra 19 ($@6)
-    T_BEGIN   [reduzir usando a regra 23 (comandos)]
-    T_END     reduzir usando a regra 23 (comandos)
-    IDENT     [reduzir usando a regra 23 (comandos)]
-    WHILE     [reduzir usando a regra 23 (comandos)]
-    $padrão  reduzir usando a regra 19 ($@6)
-
-    comando_composto    ir ao estado 35
-    $@6                 ir ao estado 25
-    comandos            ir ao estado 53
-    comando_sem_rotulo  ir ao estado 37
-    atribuicao          ir ao estado 38
-    comando_repetitivo  ir ao estado 39
-    variavel            ir ao estado 40
+    var_id  ir ao estado 52
 
 
 State 38
 
-   24 comando_sem_rotulo: atribuicao . PONTO_E_VIRGULA
+   12 declara_var: $@4 lista_id_var DOIS_PONTOS . tipo $@5 PONTO_E_VIRGULA
 
-    PONTO_E_VIRGULA  deslocar, e ir ao estado 54
+    IDENT  deslocar, e ir ao estado 53
+
+    tipo  ir ao estado 54
 
 
 State 39
 
-   25 comando_sem_rotulo: comando_repetitivo . comandos
+   38 fator: ABRE_PARENTESES . expressao_simples FECHA_PARENTESES
 
-    IDENT  deslocar, e ir ao estado 33
-    WHILE  deslocar, e ir ao estado 34
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
 
-    T_BEGIN   reduzir usando a regra 19 ($@6)
-    T_BEGIN   [reduzir usando a regra 23 (comandos)]
-    T_END     reduzir usando a regra 23 (comandos)
-    IDENT     [reduzir usando a regra 23 (comandos)]
-    WHILE     [reduzir usando a regra 23 (comandos)]
-    $padrão  reduzir usando a regra 19 ($@6)
-
-    comando_composto    ir ao estado 35
-    $@6                 ir ao estado 25
-    comandos            ir ao estado 55
-    comando_sem_rotulo  ir ao estado 37
-    atribuicao          ir ao estado 38
-    comando_repetitivo  ir ao estado 39
-    variavel            ir ao estado 40
+    variavel           ir ao estado 41
+    expressao_simples  ir ao estado 55
+    termo              ir ao estado 44
+    fator              ir ao estado 45
+    numero             ir ao estado 46
 
 
 State 40
 
-   26 atribuicao: variavel . ATRIBUICAO expressao_simples
+   45 numero: NUMERO .
 
-    ATRIBUICAO  deslocar, e ir ao estado 56
+    $padrão  reduzir usando a regra 45 (numero)
 
 
 State 41
+
+   36 fator: variavel .
+
+    $padrão  reduzir usando a regra 36 (fator)
+
+
+State 42
+
+   25 comando_repetitivo: WHILE expressao . DO comando_composto
+
+    DO  deslocar, e ir ao estado 56
+
+
+State 43
+
+   27 expressao: expressao_simples . relacao expressao_simples
+   28 expressao_simples: expressao_simples . MAIS termo
+   29                  | expressao_simples . MENOS termo
+   30                  | expressao_simples . OR termo
+
+    MAIS   deslocar, e ir ao estado 57
+    MENOS  deslocar, e ir ao estado 58
+    OR     deslocar, e ir ao estado 59
+    IGUAL  deslocar, e ir ao estado 60
+    MAIOR  deslocar, e ir ao estado 61
+    MENOR  deslocar, e ir ao estado 62
+
+    relacao  ir ao estado 63
+
+
+State 44
+
+   31 expressao_simples: termo .
+   32 termo: termo . MULT fator
+   33      | termo . AND fator
+   34      | termo . DIV fator
+
+    MULT  deslocar, e ir ao estado 64
+    DIV   deslocar, e ir ao estado 65
+    AND   deslocar, e ir ao estado 66
+
+    $padrão  reduzir usando a regra 31 (expressao_simples)
+
+
+State 45
+
+   35 termo: fator .
+
+    $padrão  reduzir usando a regra 35 (termo)
+
+
+State 46
+
+   37 fator: numero .
+
+    $padrão  reduzir usando a regra 37 (fator)
+
+
+State 47
+
+   19 comando_composto: T_BEGIN comandos T_END .
+
+    $padrão  reduzir usando a regra 19 (comando_composto)
+
+
+State 48
+
+   20 comandos: comando_sem_rotulo comandos .
+
+    $padrão  reduzir usando a regra 20 (comandos)
+
+
+State 49
+
+   22 comando_sem_rotulo: atribuicao PONTO_E_VIRGULA .
+
+    $padrão  reduzir usando a regra 22 (comando_sem_rotulo)
+
+
+State 50
+
+   23 comando_sem_rotulo: comando_repetitivo comandos .
+
+    $padrão  reduzir usando a regra 23 (comando_sem_rotulo)
+
+
+State 51
+
+   24 atribuicao: variavel ATRIBUICAO . expressao_simples
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel           ir ao estado 41
+    expressao_simples  ir ao estado 67
+    termo              ir ao estado 44
+    fator              ir ao estado 45
+    numero             ir ao estado 46
+
+
+State 52
 
    14 lista_id_var: lista_id_var VIRGULA var_id .
 
     $padrão  reduzir usando a regra 14 (lista_id_var)
 
 
-State 42
+State 53
 
    13 tipo: IDENT .
 
     $padrão  reduzir usando a regra 13 (tipo)
 
 
-State 43
+State 54
 
    12 declara_var: $@4 lista_id_var DOIS_PONTOS tipo . $@5 PONTO_E_VIRGULA
 
     $padrão  reduzir usando a regra 11 ($@5)
 
-    $@5  ir ao estado 57
-
-
-State 44
-
-   40 fator: ABRE_PARENTESES . expressao_simples FECHA_PARENTESES
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel           ir ao estado 46
-    expressao_simples  ir ao estado 58
-    termo              ir ao estado 49
-    fator              ir ao estado 50
-    numero             ir ao estado 51
-
-
-State 45
-
-   47 numero: NUMERO .
-
-    $padrão  reduzir usando a regra 47 (numero)
-
-
-State 46
-
-   38 fator: variavel .
-
-    $padrão  reduzir usando a regra 38 (fator)
-
-
-State 47
-
-   27 comando_repetitivo: WHILE expressao . DO comando_composto
-
-    DO  deslocar, e ir ao estado 59
-
-
-State 48
-
-   29 expressao: expressao_simples . relacao expressao_simples
-   30 expressao_simples: expressao_simples . MAIS termo
-   31                  | expressao_simples . MENOS termo
-   32                  | expressao_simples . OR termo
-
-    MAIS   deslocar, e ir ao estado 60
-    MENOS  deslocar, e ir ao estado 61
-    OR     deslocar, e ir ao estado 62
-    IGUAL  deslocar, e ir ao estado 63
-    MAIOR  deslocar, e ir ao estado 64
-    MENOR  deslocar, e ir ao estado 65
-
-    relacao  ir ao estado 66
-
-
-State 49
-
-   33 expressao_simples: termo .
-   34 termo: termo . MULT fator
-   35      | termo . AND fator
-   36      | termo . DIV fator
-
-    MULT  deslocar, e ir ao estado 67
-    DIV   deslocar, e ir ao estado 68
-    AND   deslocar, e ir ao estado 69
-
-    $padrão  reduzir usando a regra 33 (expressao_simples)
-
-
-State 50
-
-   37 termo: fator .
-
-    $padrão  reduzir usando a regra 37 (termo)
-
-
-State 51
-
-   39 fator: numero .
-
-    $padrão  reduzir usando a regra 39 (fator)
-
-
-State 52
-
-   20 comando_composto: $@6 T_BEGIN comandos T_END .
-
-    $padrão  reduzir usando a regra 20 (comando_composto)
-
-
-State 53
-
-   21 comandos: comando_sem_rotulo comandos .
-
-    $padrão  reduzir usando a regra 21 (comandos)
-
-
-State 54
-
-   24 comando_sem_rotulo: atribuicao PONTO_E_VIRGULA .
-
-    $padrão  reduzir usando a regra 24 (comando_sem_rotulo)
+    $@5  ir ao estado 68
 
 
 State 55
 
-   25 comando_sem_rotulo: comando_repetitivo comandos .
+   28 expressao_simples: expressao_simples . MAIS termo
+   29                  | expressao_simples . MENOS termo
+   30                  | expressao_simples . OR termo
+   38 fator: ABRE_PARENTESES expressao_simples . FECHA_PARENTESES
 
-    $padrão  reduzir usando a regra 25 (comando_sem_rotulo)
+    FECHA_PARENTESES  deslocar, e ir ao estado 69
+    MAIS              deslocar, e ir ao estado 57
+    MENOS             deslocar, e ir ao estado 58
+    OR                deslocar, e ir ao estado 59
 
 
 State 56
 
-   26 atribuicao: variavel ATRIBUICAO . expressao_simples
+   25 comando_repetitivo: WHILE expressao DO . comando_composto
 
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
+    T_BEGIN  deslocar, e ir ao estado 24
 
-    variavel           ir ao estado 46
-    expressao_simples  ir ao estado 70
-    termo              ir ao estado 49
-    fator              ir ao estado 50
-    numero             ir ao estado 51
+    comando_composto  ir ao estado 70
 
 
 State 57
 
-   12 declara_var: $@4 lista_id_var DOIS_PONTOS tipo $@5 . PONTO_E_VIRGULA
+   28 expressao_simples: expressao_simples MAIS . termo
 
-    PONTO_E_VIRGULA  deslocar, e ir ao estado 71
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel  ir ao estado 41
+    termo     ir ao estado 71
+    fator     ir ao estado 45
+    numero    ir ao estado 46
 
 
 State 58
 
-   30 expressao_simples: expressao_simples . MAIS termo
-   31                  | expressao_simples . MENOS termo
-   32                  | expressao_simples . OR termo
-   40 fator: ABRE_PARENTESES expressao_simples . FECHA_PARENTESES
+   29 expressao_simples: expressao_simples MENOS . termo
 
-    FECHA_PARENTESES  deslocar, e ir ao estado 72
-    MAIS              deslocar, e ir ao estado 60
-    MENOS             deslocar, e ir ao estado 61
-    OR                deslocar, e ir ao estado 62
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel  ir ao estado 41
+    termo     ir ao estado 72
+    fator     ir ao estado 45
+    numero    ir ao estado 46
 
 
 State 59
 
-   27 comando_repetitivo: WHILE expressao DO . comando_composto
+   30 expressao_simples: expressao_simples OR . termo
 
-    $padrão  reduzir usando a regra 19 ($@6)
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
 
-    comando_composto  ir ao estado 73
-    $@6               ir ao estado 25
+    variavel  ir ao estado 41
+    termo     ir ao estado 73
+    fator     ir ao estado 45
+    numero    ir ao estado 46
 
 
 State 60
 
-   30 expressao_simples: expressao_simples MAIS . termo
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    termo     ir ao estado 74
-    fator     ir ao estado 50
-    numero    ir ao estado 51
-
-
-State 61
-
-   31 expressao_simples: expressao_simples MENOS . termo
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    termo     ir ao estado 75
-    fator     ir ao estado 50
-    numero    ir ao estado 51
-
-
-State 62
-
-   32 expressao_simples: expressao_simples OR . termo
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    termo     ir ao estado 76
-    fator     ir ao estado 50
-    numero    ir ao estado 51
-
-
-State 63
-
-   46 relacao: IGUAL .
-
-    $padrão  reduzir usando a regra 46 (relacao)
-
-
-State 64
-
-   41 relacao: MAIOR .
-   44        | MAIOR . IGUAL
-
-    IGUAL  deslocar, e ir ao estado 77
-
-    $padrão  reduzir usando a regra 41 (relacao)
-
-
-State 65
-
-   42 relacao: MENOR .
-   43        | MENOR . MAIOR
-   45        | MENOR . IGUAL
-
-    IGUAL  deslocar, e ir ao estado 78
-    MAIOR  deslocar, e ir ao estado 79
-
-    $padrão  reduzir usando a regra 42 (relacao)
-
-
-State 66
-
-   29 expressao: expressao_simples relacao . expressao_simples
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel           ir ao estado 46
-    expressao_simples  ir ao estado 80
-    termo              ir ao estado 49
-    fator              ir ao estado 50
-    numero             ir ao estado 51
-
-
-State 67
-
-   34 termo: termo MULT . fator
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    fator     ir ao estado 81
-    numero    ir ao estado 51
-
-
-State 68
-
-   36 termo: termo DIV . fator
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    fator     ir ao estado 82
-    numero    ir ao estado 51
-
-
-State 69
-
-   35 termo: termo AND . fator
-
-    ABRE_PARENTESES  deslocar, e ir ao estado 44
-    IDENT            deslocar, e ir ao estado 33
-    NUMERO           deslocar, e ir ao estado 45
-
-    variavel  ir ao estado 46
-    fator     ir ao estado 83
-    numero    ir ao estado 51
-
-
-State 70
-
-   26 atribuicao: variavel ATRIBUICAO expressao_simples .
-   30 expressao_simples: expressao_simples . MAIS termo
-   31                  | expressao_simples . MENOS termo
-   32                  | expressao_simples . OR termo
-
-    MAIS   deslocar, e ir ao estado 60
-    MENOS  deslocar, e ir ao estado 61
-    OR     deslocar, e ir ao estado 62
-
-    $padrão  reduzir usando a regra 26 (atribuicao)
-
-
-State 71
-
-   12 declara_var: $@4 lista_id_var DOIS_PONTOS tipo $@5 PONTO_E_VIRGULA .
-
-    $padrão  reduzir usando a regra 12 (declara_var)
-
-
-State 72
-
-   40 fator: ABRE_PARENTESES expressao_simples FECHA_PARENTESES .
-
-    $padrão  reduzir usando a regra 40 (fator)
-
-
-State 73
-
-   27 comando_repetitivo: WHILE expressao DO comando_composto .
-
-    $padrão  reduzir usando a regra 27 (comando_repetitivo)
-
-
-State 74
-
-   30 expressao_simples: expressao_simples MAIS termo .
-   34 termo: termo . MULT fator
-   35      | termo . AND fator
-   36      | termo . DIV fator
-
-    MULT  deslocar, e ir ao estado 67
-    DIV   deslocar, e ir ao estado 68
-    AND   deslocar, e ir ao estado 69
-
-    $padrão  reduzir usando a regra 30 (expressao_simples)
-
-
-State 75
-
-   31 expressao_simples: expressao_simples MENOS termo .
-   34 termo: termo . MULT fator
-   35      | termo . AND fator
-   36      | termo . DIV fator
-
-    MULT  deslocar, e ir ao estado 67
-    DIV   deslocar, e ir ao estado 68
-    AND   deslocar, e ir ao estado 69
-
-    $padrão  reduzir usando a regra 31 (expressao_simples)
-
-
-State 76
-
-   32 expressao_simples: expressao_simples OR termo .
-   34 termo: termo . MULT fator
-   35      | termo . AND fator
-   36      | termo . DIV fator
-
-    MULT  deslocar, e ir ao estado 67
-    DIV   deslocar, e ir ao estado 68
-    AND   deslocar, e ir ao estado 69
-
-    $padrão  reduzir usando a regra 32 (expressao_simples)
-
-
-State 77
-
-   44 relacao: MAIOR IGUAL .
+   44 relacao: IGUAL .
 
     $padrão  reduzir usando a regra 44 (relacao)
 
 
-State 78
+State 61
 
-   45 relacao: MENOR IGUAL .
+   39 relacao: MAIOR .
+   42        | MAIOR . IGUAL
 
-    $padrão  reduzir usando a regra 45 (relacao)
+    IGUAL  deslocar, e ir ao estado 74
+
+    $padrão  reduzir usando a regra 39 (relacao)
 
 
-State 79
+State 62
 
-   43 relacao: MENOR MAIOR .
+   40 relacao: MENOR .
+   41        | MENOR . MAIOR
+   43        | MENOR . IGUAL
+
+    IGUAL  deslocar, e ir ao estado 75
+    MAIOR  deslocar, e ir ao estado 76
+
+    $padrão  reduzir usando a regra 40 (relacao)
+
+
+State 63
+
+   27 expressao: expressao_simples relacao . expressao_simples
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel           ir ao estado 41
+    expressao_simples  ir ao estado 77
+    termo              ir ao estado 44
+    fator              ir ao estado 45
+    numero             ir ao estado 46
+
+
+State 64
+
+   32 termo: termo MULT . fator
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel  ir ao estado 41
+    fator     ir ao estado 78
+    numero    ir ao estado 46
+
+
+State 65
+
+   34 termo: termo DIV . fator
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel  ir ao estado 41
+    fator     ir ao estado 79
+    numero    ir ao estado 46
+
+
+State 66
+
+   33 termo: termo AND . fator
+
+    ABRE_PARENTESES  deslocar, e ir ao estado 39
+    IDENT            deslocar, e ir ao estado 30
+    NUMERO           deslocar, e ir ao estado 40
+
+    variavel  ir ao estado 41
+    fator     ir ao estado 80
+    numero    ir ao estado 46
+
+
+State 67
+
+   24 atribuicao: variavel ATRIBUICAO expressao_simples .
+   28 expressao_simples: expressao_simples . MAIS termo
+   29                  | expressao_simples . MENOS termo
+   30                  | expressao_simples . OR termo
+
+    MAIS   deslocar, e ir ao estado 57
+    MENOS  deslocar, e ir ao estado 58
+    OR     deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 24 (atribuicao)
+
+
+State 68
+
+   12 declara_var: $@4 lista_id_var DOIS_PONTOS tipo $@5 . PONTO_E_VIRGULA
+
+    PONTO_E_VIRGULA  deslocar, e ir ao estado 81
+
+
+State 69
+
+   38 fator: ABRE_PARENTESES expressao_simples FECHA_PARENTESES .
+
+    $padrão  reduzir usando a regra 38 (fator)
+
+
+State 70
+
+   25 comando_repetitivo: WHILE expressao DO comando_composto .
+
+    $padrão  reduzir usando a regra 25 (comando_repetitivo)
+
+
+State 71
+
+   28 expressao_simples: expressao_simples MAIS termo .
+   32 termo: termo . MULT fator
+   33      | termo . AND fator
+   34      | termo . DIV fator
+
+    MULT  deslocar, e ir ao estado 64
+    DIV   deslocar, e ir ao estado 65
+    AND   deslocar, e ir ao estado 66
+
+    $padrão  reduzir usando a regra 28 (expressao_simples)
+
+
+State 72
+
+   29 expressao_simples: expressao_simples MENOS termo .
+   32 termo: termo . MULT fator
+   33      | termo . AND fator
+   34      | termo . DIV fator
+
+    MULT  deslocar, e ir ao estado 64
+    DIV   deslocar, e ir ao estado 65
+    AND   deslocar, e ir ao estado 66
+
+    $padrão  reduzir usando a regra 29 (expressao_simples)
+
+
+State 73
+
+   30 expressao_simples: expressao_simples OR termo .
+   32 termo: termo . MULT fator
+   33      | termo . AND fator
+   34      | termo . DIV fator
+
+    MULT  deslocar, e ir ao estado 64
+    DIV   deslocar, e ir ao estado 65
+    AND   deslocar, e ir ao estado 66
+
+    $padrão  reduzir usando a regra 30 (expressao_simples)
+
+
+State 74
+
+   42 relacao: MAIOR IGUAL .
+
+    $padrão  reduzir usando a regra 42 (relacao)
+
+
+State 75
+
+   43 relacao: MENOR IGUAL .
 
     $padrão  reduzir usando a regra 43 (relacao)
 
 
-State 80
+State 76
 
-   29 expressao: expressao_simples relacao expressao_simples .
-   30 expressao_simples: expressao_simples . MAIS termo
-   31                  | expressao_simples . MENOS termo
-   32                  | expressao_simples . OR termo
+   41 relacao: MENOR MAIOR .
 
-    MAIS   deslocar, e ir ao estado 60
-    MENOS  deslocar, e ir ao estado 61
-    OR     deslocar, e ir ao estado 62
-
-    $padrão  reduzir usando a regra 29 (expressao)
+    $padrão  reduzir usando a regra 41 (relacao)
 
 
-State 81
+State 77
 
-   34 termo: termo MULT fator .
+   27 expressao: expressao_simples relacao expressao_simples .
+   28 expressao_simples: expressao_simples . MAIS termo
+   29                  | expressao_simples . MENOS termo
+   30                  | expressao_simples . OR termo
+
+    MAIS   deslocar, e ir ao estado 57
+    MENOS  deslocar, e ir ao estado 58
+    OR     deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 27 (expressao)
+
+
+State 78
+
+   32 termo: termo MULT fator .
+
+    $padrão  reduzir usando a regra 32 (termo)
+
+
+State 79
+
+   34 termo: termo DIV fator .
 
     $padrão  reduzir usando a regra 34 (termo)
 
 
-State 82
+State 80
 
-   36 termo: termo DIV fator .
+   33 termo: termo AND fator .
 
-    $padrão  reduzir usando a regra 36 (termo)
+    $padrão  reduzir usando a regra 33 (termo)
 
 
-State 83
+State 81
 
-   35 termo: termo AND fator .
+   12 declara_var: $@4 lista_id_var DOIS_PONTOS tipo $@5 PONTO_E_VIRGULA .
 
-    $padrão  reduzir usando a regra 35 (termo)
+    $padrão  reduzir usando a regra 12 (declara_var)

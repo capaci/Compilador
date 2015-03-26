@@ -6,3 +6,9 @@
      ARMZ 0,0
      CRVL 0,0
      CRCT 10
+     CRVL 0,0
+     CRCT 1
+     SOMA
+     ARMZ 0,0
+     DMEM 4
+     PARA
