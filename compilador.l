@@ -111,12 +111,6 @@ end { simbolo = simb_end;
           return FECHA_PARENTESES;
  }
 
-{ident} { simbolo = simb_identificador; 
-          strncpy (token, yytext, TAM_TOKEN);
-          IMPRIME(" ident  ");
-          return IDENT;
-        }
-
 \+  { simbolo = simb_mais;
           strncpy (token, yytext, TAM_TOKEN);
           IMPRIME(" mais ");
@@ -197,7 +191,7 @@ else { simbolo = simb_else;
 
 while { simbolo = simb_while;  
           strncpy (token, yytext, TAM_TOKEN);
-          IMPRIME("while  ");
+          IMPRIME("while ");
           return WHILE;
  }
 
@@ -248,6 +242,12 @@ not { simbolo = simb_not;
           IMPRIME(" menor ");
           return MENOR;
  }
+
+{ident} { simbolo = simb_identificador; 
+          strncpy (token, yytext, TAM_TOKEN);
+          IMPRIME(" ident  ");
+          return IDENT;
+        }
 
 
 

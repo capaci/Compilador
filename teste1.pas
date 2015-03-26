@@ -3,8 +3,9 @@ var m,n :  integer;
 	a,b :  boolean;
  
 begin
-	a := b + 2;
-	while a > 3 do
+	a := 2 + 1;
+	while a < 10
 	begin
+		a:= a+1;
 	end
 end.

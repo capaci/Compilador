@@ -73,13 +73,14 @@ extern char token[TAM_TOKEN];
 extern int nivel_lexico;
 extern int desloc;
 extern int nl;
-
+extern char *ultimoRotulo;
 
 simbolos simbolo, relacao;
 char token[TAM_TOKEN];
 
 TS *pilhaTS;
-
+noTS *noAux; //no para fazer a busca dos endereços lexicos
+char varAux[TAM_TOKEN]; //string para guardar a variavel que vai ser buscada 
 
 /* -------------------------------------------------------------------
  * variáveis globais

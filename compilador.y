@@ -97,34 +97,39 @@ var_id: IDENT
 /* -------------------------------------------------------------------
  *  COMANDOS
  * ------------------------------------------------------------------- */
-comando_composto: T_BEGIN comandos T_END 
+comando_composto: {printf("aquiii\n");} T_BEGIN  comandos T_END 
 ;
 
-comandos: rotulo comando_sem_rotulo
-		| comando_sem_rotulo
-		|
+comandos:
+		 comando_sem_rotulo comandos
+		| comando_composto
+		| 
 ;
 
-comando_sem_rotulo: atribuicao PONTO_E_VIRGULA comandos
+comando_sem_rotulo: atribuicao PONTO_E_VIRGULA
 //					| chamada_de_procedimento
 //					| desvio
 //					| comando_composto
 //					| comando_condicional
-					| comando_repetitivo comandos
-					|
+					| comando_repetitivo comandos  
+					
 ;
 
-atribuicao: variavel ATRIBUICAO expressao_simples { geraCodigo(NULL, "ARMZ 0,0");}
+atribuicao: variavel ATRIBUICAO expressao_simples { 
+													//noAux = busca_simb_TS(token); 
+													sprintf(dados, "ARMZ %d,%d",noAux->nivelLexico, noAux->deslocamento);
+													geraCodigo(NULL, dados);
+												  }
 ;
 
 //chamada_de_procedimento:;
 //desvio:;
 //comando_condicional:;
-comando_repetitivo: WHILE expressao_booleana DO comandos
+comando_repetitivo: WHILE expressao DO comando_composto
 ;
 
-rotulo: numero DOIS_PONTOS
-;
+//rotulo: numero DOIS_PONTOS
+//;
 
 variavel: IDENT {
 					if (!buscaTS(token, 0, 0)){
@@ -134,8 +139,8 @@ variavel: IDENT {
 /* -------------------------------------------------------------------
  *  EXPRESSOES
  * ------------------------------------------------------------------- */
-expressao_booleana:	//expressao_simples {printf("sss3\n");}
-		 expressao_simples  {printf("-----------\n");} relacao {printf("2\n");} expressao_simples {printf("3\n");}
+expressao:	//expressao_simples {printf("sss3\n");}
+		  expressao_simples  relacao expressao_simples
 ;
 
 expressao_simples:	  expressao_simples MAIS termo  { geraCodigo(NULL, "SOMA"); }

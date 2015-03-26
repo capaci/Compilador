@@ -97,16 +97,31 @@ noTS* desempilhaTS(){
 	return no;
 }
 
-/* Busca simbolo na TS*/
+/* Verifica se simbolo existe na TS*/
 int buscaTS(char *simb, int nivelLex, int desloc){
 	noTS *no = pilhaTS->topo;
 	while (no != NULL){
-		if (no->nivelLexico == nivelLex && no->deslocamento == desloc && strcmp(simb, no->ident) == 0)
+		if (no->nivelLexico == nivelLex && no->deslocamento == desloc && strcmp(simb, no->ident) == 0){
+			noAux = no;
 			return 1;
+		}
 		no = no->anterior;
 	}
 
 	return 0;
+}
+
+/* Busca simbolo na TS*/
+noTS *busca_simb_TS(char simb[TAM_TOKEN]){
+	noTS *no = pilhaTS->topo;
+	while (no != NULL){
+		printf("id = %s, tipo = %s, categ = %s, nivelLex = %d, desloc = %d\n", no->ident, no->tipo, no->categ, no->nivelLexico, no->deslocamento);
+		if (strcmp(simb, no->ident) == 0)
+			return no;
+		no = no->anterior;
+	}
+
+	return NULL;
 }
 
 /* Imprime a TS*/
@@ -118,5 +133,16 @@ void imprimeTS(){
 		no = no->prox;
 	}
 }
+
+/* -------------------------------------------------------------------
+ *  ROTULOS
+ * ------------------------------------------------------------------- */
+/* Gera um rótulo para a MEPA*/
+char* geraRotulo(){
+	printf("nada");
+}
+
+
+
 
 
