@@ -44,6 +44,66 @@ int imprimeErro ( char* erro ) {
 /* -------------------------------------------------------------------
  *  TABELA DE SIMBOLOS
  * ------------------------------------------------------------------- */
+/* Inicia pilha de tipos */
+void iniciaTipo () {
+    pilhaTipo = malloc( sizeof (pilhaTp));
+    pilhaTipo->topo = NULL;
+    pilhaTipo->tam = 0;
+}
+
+/* Empilha tipo na pilha de tipos */
+void empilhaTipo( char *tipoVar){
+	char *tipo = malloc(sizeof(char) * TAM_TOKEN);
+
+	strcpy(tipo,tipoVar);
+
+	noTipo *no = malloc(sizeof(noTipo));
+
+	no->tipo = tipo;
+	
+	no->anterior = pilhaTipo->topo;
+	no->prox = NULL;
+
+	if (pilhaTipo->tam != 0)
+		pilhaTipo->topo->prox = no;
+	pilhaTipo->topo = no;
+	pilhaTipo->tam++;
+
+	if (pilhaTipo->tam == 1)
+		pilhaTipo->primeiro = pilhaTipo->topo;
+
+}
+
+/* Desempilha tipo da tabela de tipos*/
+noTipo* desempilhaTipo(){
+	if (pilhaTipo->tam == 0)
+		return NULL;
+	noTipo *no = pilhaTipo->topo;
+	if (pilhaTipo->tam == 1)
+		pilhaTipo->topo = NULL;
+	else{
+		pilhaTipo->topo = pilhaTipo->topo->anterior;
+		pilhaTipo->topo->prox = NULL;
+		no->anterior = NULL;
+	}
+	pilhaTipo->tam--;
+
+	return no;
+}
+
+/* Imprime a pilha de Tipos*/
+void imprimeTipo(){
+	noTipo *no = pilhaTipo->primeiro;
+
+	while(no != NULL){
+		printf("id = %s\n", no->tipo);
+		no = no->prox;
+	}
+}
+
+/* -------------------------------------------------------------------
+ *  TABELA DE SIMBOLOS
+ * ------------------------------------------------------------------- */
 /* Inicia pilha da tabela de simbolos */
 void iniciaTS () {
     pilhaTS = malloc( sizeof (TS));
@@ -78,20 +138,23 @@ void empilhaTS( char *id, char *tpVar, char *cat, int nivelLex, int desloc){
 
 	if (pilhaTS->tam == 1)
 		pilhaTS->primeiro = pilhaTS->topo;
-
-	imprimeTS();
-
 }
 
 /* Desempilha simbolo da ts*/
 noTS* desempilhaTS(){
+	puts("1");
 	if (pilhaTS->tam == 0)
 		return NULL;
+	puts("2");
 
 	noTS *no = pilhaTS->topo;
+	puts("3");
 	pilhaTS->topo = pilhaTS->topo->anterior;
+	puts("4");
 	pilhaTS->topo->prox = NULL;
+	puts("5");
 	no->anterior = NULL;
+	puts("6");
 	pilhaTS->tam--;
 
 	return no;
@@ -111,20 +174,6 @@ int buscaTS(char *simb, int nivelLex, int desloc){
 	return 0;
 }
 
-/* Busca simbolo na TS*/
-noTS *busca_endereco_lexico(char simb[TAM_TOKEN]){
-	noTS *no = pilhaTS->topo;
-	printf("----buscaSimb----");
-	while (no != NULL){
-		printf("id = %s, tipo = %s, categ = %s, nivelLex = %d, desloc = %d\n", no->ident, no->tipo, no->categ, no->nivelLexico, no->deslocamento);
-		if (strcmp(simb, no->ident) == 0)
-			return no;
-		no = no->anterior;
-	}
-
-	return NULL;
-}
-
 /* Imprime a TS*/
 void imprimeTS(){
 	noTS *no = pilhaTS->primeiro;
@@ -140,10 +189,35 @@ void imprimeTS(){
  * ------------------------------------------------------------------- */
 /* Gera um rótulo para a MEPA*/
 char* geraRotulo(){
-	printf("nada");
+	printf("nada\n");
 }
 
+/* -------------------------------------------------------------------
+ *  TIPOS
+ * ------------------------------------------------------------------- */
+/* Verificação de tipos*/
+int verificaTipo(char *tipo){
+	noTipo *a, *b;
+	int retorno;
+	a = desempilhaTipo();
+	b = desempilhaTipo();
 
+	if (strcmp(a->tipo,b->tipo) == 0 && strcmp(tipo, a->tipo) == 0)
+		retorno = 1;
+	else
+		retorno = 0;
 
+	empilhaTipo(a->tipo);
+	free(a);
+	free(b);
+	return retorno;
+}
 
+void atualizaTipo(char *type, int num){
+	noTS *no = pilhaTS->topo;	
+	for (;num > 0; num --){
+		strcpy(no->tipo, type);
+		no = no->anterior;
+	}
+}
 

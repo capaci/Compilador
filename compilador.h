@@ -71,6 +71,19 @@ typedef struct TS{
 } TS;
 
 /* -------------------------------------------------------------------
+ * TABELA DE SIMBOLOS
+ * ------------------------------------------------------------------- */
+typedef struct noTipo{
+	char *tipo;
+	struct noTipo *prox, *anterior;	
+} noTipo;
+
+typedef struct pilhaTp{
+	noTipo *topo, *primeiro;
+	int tam;
+} pilhaTp;
+
+/* -------------------------------------------------------------------
  * variáveis globais
  * ------------------------------------------------------------------- */
 
@@ -87,6 +100,8 @@ char token[TAM_TOKEN];
 TS *pilhaTS;
 noTS *noAux; //no para fazer a busca dos endereços lexicos
 char varAux[TAM_TOKEN]; //string para guardar a variavel que vai ser buscada 
+pilhaTp *pilhaTipo;
+noTipo *noTp;
 
 /* -------------------------------------------------------------------
  * variáveis globais
@@ -96,3 +111,15 @@ void empilhaTS( char *id, char *tpVar, char *cat, int nivelLex, int desloc);
 noTS* desempilhaTS();
 int buscaTS(char *simb, int nivelLex, int desloc);
 void imprimeTS();
+char* geraRotulo();
+int verificaTipos(char *tipo);
+void atualizaTipo(char *type, int num);
+
+void iniciaTipo ();
+void empilhaTipo( char *tipoVar);
+noTipo* desempilhaTipo();
+void imprimeTipo();
+
+
+
+

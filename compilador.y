@@ -11,7 +11,12 @@
 #include "compilador.h"
 
 int numVars;
+int numVarsAtualiza;
+int nivelLexico;
+int deslocamento;
 char dados[256];
+char varRecebe[TAM_TOKEN];
+
 %}
 
 %token PROGRAM ABRE_PARENTESES FECHA_PARENTESES 
@@ -49,7 +54,7 @@ bloco       :
               ;
 
 parte_declara_vars: parte_declara_vars PONTO_E_VIRGULA declara_vars
- 			| 		VAR {numVars = 0;} declara_vars { sprintf ( dados, "AMEM %d", numVars); geraCodigo(NULL, dados);  }
+ 			| 		VAR {numVarsAtualiza = 0; numVars = 0;} declara_vars { sprintf ( dados, "AMEM %d", numVars); geraCodigo(NULL, dados);  }
 ;
 
 declara_vars: declara_vars declara_var 
@@ -60,7 +65,8 @@ declara_var : { }
               lista_id_var DOIS_PONTOS 
               tipo 
               { /* AMEM */
-				/*atualizar tipo das variaveis*/
+				atualizaTipo(token,numVarsAtualiza);
+				numVarsAtualiza = 0;
 	          }
               PONTO_E_VIRGULA
 ;
@@ -79,8 +85,10 @@ lista_idents: lista_idents VIRGULA IDENT
 var_id: IDENT
 			{ /* insere vars na tabela de símbolos */
 				if (!buscaTS(token, 0, 0)){
-					empilhaTS( token, "integer", "VS", 0, 0);
-					numVars++;		
+					empilhaTS( token, "", "VS", nivelLexico, deslocamento);
+					deslocamento++;
+					numVars++;
+					numVarsAtualiza++;
 				}
 				else{
 					printf("A váriavel %s já foi declarada\n", token);
@@ -90,9 +98,6 @@ var_id: IDENT
 
 ;
 
-
-
-;
 
 /* -------------------------------------------------------------------
  *  COMANDOS
@@ -114,11 +119,14 @@ comando_sem_rotulo: atribuicao PONTO_E_VIRGULA
 					
 ;
 
-atribuicao: variavel ATRIBUICAO expressao_simples { 
-													//noAux = busca_simb_TS(token); 
-													sprintf(dados, "ARMZ %d,%d",noAux->nivelLexico, noAux->deslocamento);
-													geraCodigo(NULL, dados);
-												  }
+atribuicao: variavel {strcpy(varRecebe,token);}ATRIBUICAO expressao_simples {
+														buscaTS(varRecebe,nivelLexico, deslocamento); 
+														noTp = desempilhaTipo();
+														if (strcmp(noAux->tipo, noTp->tipo) == 0){
+															sprintf(dados, "ARMZ %d,%d",noAux->nivelLexico, noAux->deslocamento);
+															geraCodigo(NULL, dados);
+														}
+													}
 ;
 
 //chamada_de_procedimento:;
@@ -139,33 +147,45 @@ variavel:  IDENT {
  *  EXPRESSOES
  * ------------------------------------------------------------------- */
 expressao:	//expressao_simples {printf("sss3\n");}
-		  expressao_simples  relacao expressao_simples
+		  expressao_simples  relacao
 ;
 
-expressao_simples:	  expressao_simples MAIS termo  { geraCodigo(NULL, "SOMA"); }
-					| expressao_simples MENOS termo { geraCodigo(NULL, "SUBT"); }
-					| expressao_simples OR termo    { geraCodigo(NULL, "DISJ"); }
+expressao_simples:	  expressao_simples MAIS termo  {
+														if (verificaTipo("integer"))
+															geraCodigo(NULL, "SOMA"); }
+					| expressao_simples MENOS termo   {
+														if (verificaTipo("integer"))
+															geraCodigo(NULL, "SUBT"); }
+					| expressao_simples OR termo   {
+														if (verificaTipo("boolean"))
+															geraCodigo(NULL, "DISJ"); }
 					| termo
 
 ;
 
-termo:  termo MULT fator { geraCodigo(NULL, "MULT"); }
-	|	termo AND fator  { geraCodigo(NULL, "CONJ"); }
-	|	termo DIV fator  { geraCodigo(NULL, "DIVI"); }
+termo:  termo MULT fator   {
+								if (verificaTipo("boolean"))
+									geraCodigo(NULL, "MULT"); }
+	|	termo DIV fator   {
+								if (verificaTipo("boolean"))
+									geraCodigo(NULL, "DIVI"); }
+	|	termo AND fator   {
+								if (verificaTipo("boolean"))
+									geraCodigo(NULL, "CONJ"); }
 	|	fator
 ;
 
-fator:	variavel { geraCodigo(NULL, "CRVL 0,0");}
-	|	numero
+fator:	variavel { empilhaTipo(noAux->tipo); sprintf(dados, "CRVL %d,%d",noAux->nivelLexico, noAux->deslocamento); geraCodigo(NULL, dados);}
+	|	numero { empilhaTipo("integer");}
 	|	ABRE_PARENTESES expressao_simples FECHA_PARENTESES
 ;
 
-relacao:  MAIOR 
-		| MENOR
-		| MENOR MAIOR
-		| MAIOR IGUAL
-		| MENOR IGUAL
-		| IGUAL
+relacao:  MAIOR expressao_simples  { geraCodigo(NULL, "CMMA");}
+		| MENOR expressao_simples { geraCodigo(NULL, "CMME");}
+		| MENOR MAIOR expressao_simples { geraCodigo(NULL, "CMDG");}
+		| MAIOR IGUAL expressao_simples { geraCodigo(NULL, "CMAG");}
+		| MENOR IGUAL expressao_simples { geraCodigo(NULL, "CMEG");}
+		| IGUAL expressao_simples { geraCodigo(NULL, "CMIG");}
 ;
 
 numero: NUMERO { sprintf(dados, "CRCT %s",token); geraCodigo(NULL, dados);}
@@ -193,8 +213,15 @@ main (int argc, char** argv) {
  *  Inicia a Tabela de Símbolos
  * ------------------------------------------------------------------- */
 	iniciaTS();
+	iniciaTipo();
 	yyin=fp;
 	yyparse();
+
+	imprimeTS();
+	puts("-----------------------------------------");
+	imprimeTipo();
+
+
 
 	return 0;
 }

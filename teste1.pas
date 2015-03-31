@@ -3,9 +3,14 @@ var m,n :  integer;
 	a,b :  boolean;
  
 begin
-	a := 2 + 1;
-	while a < 10 do
+	m := 2 + 1;
+	n := 0;
+	while n <> 10 do
 	begin
-		a := a+1;
+		m := m+1;
+		while a or b do
+		begin
+			m := m+1;
+		end
 	end
 end.
